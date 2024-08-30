@@ -1,0 +1,161 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import r2_score, accuracy_score
+
+df=pd.read_csv("project_data.csv")
+original_features_count= df.columns
+row_count = df.shape[0]
+print('Original Features count:', len(original_features_count),)
+print('list of the original features: ', original_features_count)
+print("Number of rows:", row_count)
+
+
+
+
+Class_dict={}
+for Class in df['class'].value_counts().index:
+    Class_dict[Class]=df[df['class']==Class]['Gender'].value_counts()
+Class_df=pd.DataFrame(Class_dict)
+Class_df.index.rename("Gender",inplace=True)
+
+#visualizes the Positive/negative distribution across gender
+fig,ax1=plt.subplots(1,1,figsize=(40,8))
+ax1.bar(Class_df.index,Class_df['Positive'],color="black",label="Positive")
+ax1.bar(Class_df.index,Class_df['Negative'],color="red",label="Negative")
+
+for index in Class_df.index:
+    ax1.annotate(Class_df["Negative"].loc[index],xy=(index,Class_df["Negative"].loc[index]+100),ha="center",va="center",fontsize=30)
+    ax1.annotate(Class_df["Positive"].loc[index],xy=(index,Class_df["Positive"].loc[index]-100),ha="center",va="center",fontsize=30)
+
+plt.legend(fontsize=20)
+plt.xlabel("Gender",fontsize=30)
+plt.ylabel("Positive/Negative",fontsize=30)
+plt.title("Positive/Negative distribution across Gender",fontsize=30)
+
+
+
+
+delayed_healing_dict={} 
+for delayed_healing_ in df['delayed healing'].value_counts().index: 
+  delayed_healing_dict[delayed_healing_]=df[df['delayed healing']==delayed_healing_]['weakness'].value_counts() 
+  delayed_healing_df=pd.DataFrame(delayed_healing_dict) 
+  delayed_healing_df.index.rename("weakness",inplace=True)
+
+fig,ax1=plt.subplots(1,1,figsize=(40,8)) 
+ax1.bar(delayed_healing_df.index,delayed_healing_df['Yes'],color="green",label="Yes") 
+ax1.bar(delayed_healing_df.index,delayed_healing_df['No'],color="red",label="No")
+
+for index in delayed_healing_df.index: 
+  ax1.annotate(delayed_healing_df["No"].loc[index],xy=(index,delayed_healing_df["No"].loc[index]+100),ha="center",va="center",fontsize=35) 
+  ax1.annotate(delayed_healing_df["Yes"].loc[index],xy=(index,delayed_healing_df["Yes"].loc[index]-100),ha="center",va="center",fontsize=35)
+
+plt.legend(fontsize=20) 
+plt.xlabel("weakness",fontsize=30) 
+plt.ylabel("Yes/No",fontsize=30) 
+plt.title("delayed healing distribution across weakness",fontsize=30) 
+plt.show()
+
+
+
+weight_loss_dict={}
+for weight_loss in df['sudden weight loss'].value_counts().index:
+    weight_loss_dict[weight_loss]=df[df['sudden weight loss']==weight_loss]['Obesity'].value_counts()
+weight_loss_df=pd.DataFrame(weight_loss_dict)
+weight_loss_df.index.rename("Obesity",inplace=True)
+
+fig,ax1=plt.subplots(1,1,figsize=(40,8))
+ax1.bar(weight_loss_df.index,weight_loss_df['Yes'],color="orange",label="Yes")
+ax1.bar(weight_loss_df.index,weight_loss_df['No'],color="blue",label="No")
+
+for index in weight_loss_df.index:
+    ax1.annotate(weight_loss_df["No"].loc[index],xy=(index,weight_loss_df["No"].loc[index]+100),ha="center",va="center",fontsize=35)
+    ax1.annotate(weight_loss_df["Yes"].loc[index],xy=(index,weight_loss_df["Yes"].loc[index]-100),ha="center",va="center",fontsize=35)
+
+plt.legend(fontsize=20)
+plt.xlabel("Obesity",fontsize=30)
+plt.ylabel("Yes/No",fontsize=30)
+plt.title("Weight loss distribution across Obesity",fontsize=30)
+plt.show()
+
+
+
+
+
+delayed_healing_dict={}
+for delayed_healing_ in df['delayed healing'].value_counts().index:
+    delayed_healing_dict[delayed_healing_]=df[df['delayed healing']==delayed_healing_]['Age'].value_counts()
+delayed_healing_df=pd.DataFrame(delayed_healing_dict)
+delayed_healing_df.index.rename("Age",inplace=True)
+
+fig,ax1=plt.subplots(1,1,figsize=(40,8))
+ax1.bar(delayed_healing_df.index,delayed_healing_df['Yes'],color="yellow",label="Yes")
+ax1.bar(delayed_healing_df.index,delayed_healing_df['No'],color="darkred",label="No")
+
+for index in delayed_healing_df.index:
+    ax1.annotate(delayed_healing_df["No"].loc[index],xy=(index,delayed_healing_df["No"].loc[index]+100),ha="center",va="center",fontsize=35)
+    ax1.annotate(delayed_healing_df["Yes"].loc[index],xy=(index,delayed_healing_df["Yes"].loc[index]-100),ha="center",va="center",fontsize=35)
+
+plt.legend(fontsize=20)
+plt.xlabel("Age",fontsize=30)
+plt.ylabel("Yes/No",fontsize=30)
+plt.title("Delayed healing distribution across Age",fontsize=30)
+plt.show()
+
+
+
+
+partial_paresis_dict={}
+for partial_paresis_ in df['partial paresis'].value_counts().index:
+    partial_paresis_dict[partial_paresis_]=df[df['partial paresis']==partial_paresis_]['Age'].value_counts()
+partial_paresis_df=pd.DataFrame(partial_paresis_dict)
+partial_paresis_df.index.rename("Age",inplace=True)
+
+fig,ax1=plt.subplots(1,1,figsize=(40,8))
+ax1.bar(partial_paresis_df.index,partial_paresis_df['Yes'],color="black",label="Yes")
+ax1.bar(partial_paresis_df.index,partial_paresis_df['No'],color="darkred",label="No")
+
+for index in partial_paresis_df.index:
+    ax1.annotate(partial_paresis_df["No"].loc[index],xy=(index,partial_paresis_df["No"].loc[index]+100),ha="center",va="center",fontsize=35)
+    ax1.annotate(partial_paresis_df["Yes"].loc[index],xy=(index,partial_paresis_df["Yes"].loc[index]-100),ha="center",va="center",fontsize=35)
+
+plt.legend(fontsize=20)
+plt.xlabel("Age",fontsize=30)
+plt.ylabel("Yes/No",fontsize=30)
+plt.title("Partial paresis distribution across Age",fontsize=30)
+plt.show()
+
+
+
+
+
+
+
+
+class_dict={}
+for class_ in df['class'].value_counts().index:
+    class_dict[class_]=df[df['class']==class_]['Age'].value_counts()
+class_df=pd.DataFrame(class_dict)
+class_df.index.rename("Age",inplace=True)
+
+
+fig,ax1=plt.subplots(1,1,figsize=(40,8))
+ax1.bar(class_df.index,class_df['Positive'],color="blue",label="Positive")
+ax1.bar(class_df.index,class_df['Negative'],color="darkred",label="Negative")
+
+for index in class_df.index:
+    ax1.annotate(class_df["Negative"].loc[index],xy=(index,class_df["Negative"].loc[index]+100),ha="center",va="center",fontsize=18)
+    ax1.annotate(class_df["Positive"].loc[index],xy=(index,class_df["Positive"].loc[index]-100),ha="center",va="center",fontsize=18)
+
+plt.legend(fontsize=26)
+plt.xlabel("Age",fontsize=26)
+plt.ylabel("Positive/Negative",fontsize=26)
+plt.title("Class distribution across Age",fontsize=30)
+plt.show()
+plt.show()
